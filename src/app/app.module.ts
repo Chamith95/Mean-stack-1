@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
-import {ReactiveFormsModule} from '@angular/forms';
+import {ReactiveFormsModule,FormsModule} from '@angular/forms';
 import {MatInputModule,MatCardModule,MatButtonModule,MatToolbarModule,MatExpansionModule, MatProgressSpinnerModule} from '@angular/material';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -12,6 +12,8 @@ import { PostListComponent } from './posts/post-list/post-list.component';
 
 import {HttpClientModule} from "@angular/common/http";
 import {MatPaginatorModule} from '@angular/material/paginator';
+import { LoginComponent } from './auth/login/login.component';
+import { SignupComponent } from './auth/signup/signup.component';
 
 
 
@@ -22,6 +24,8 @@ import {MatPaginatorModule} from '@angular/material/paginator';
     PostCreateComponent,
     HeaderComponent,
     PostListComponent,
+    LoginComponent,
+    SignupComponent,
  
 
   ],
@@ -29,6 +33,7 @@ import {MatPaginatorModule} from '@angular/material/paginator';
     BrowserModule,
     AppRoutingModule,
     ReactiveFormsModule,
+    FormsModule,
     BrowserAnimationsModule,
     MatInputModule,
     MatCardModule,
