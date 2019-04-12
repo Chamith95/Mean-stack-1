@@ -44,7 +44,8 @@ export class PostCreateComponent implements OnInit {
                         id: PostData._id,
                         title: PostData.title,
                         content: PostData.content,
-                        imagePath:PostData.imagePath 
+                        imagePath:PostData.imagePath, 
+                        creator:PostData.creator
                         };
                         console.log(this.post.title);
              
@@ -87,8 +88,8 @@ export class PostCreateComponent implements OnInit {
                 id: null,
                 title:this.form.value.title,
                 content:this.form.value.content,
-                imagePath:null
-
+                imagePath:null,
+                creator:null
             };
             this.postsService.addPost(
                 this.form.value.title,
