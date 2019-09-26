@@ -54,12 +54,21 @@ router.get("",(req,res,next)=>{
  
     const pageSize=+req.query.pagesize;
     const currentPage=+req.query.page;
+    const searchCriteria=req.query.searchCriteria
     const postQuery=Post.find()
     let fetcheposts;
-    if(pageSize && currentPage){
-        postQuery
+    let searchtrue=(searchCriteria.length==9)
+    console.log(searchtrue)
+    console.log(searchCriteria)
+    if(pageSize && currentPage && !searchtrue){
+   
+        postQuery.find({$text: {$search: searchCriteria}})
             .skip(pageSize *(currentPage -1))
             .limit(pageSize);
+    }else if(pageSize && currentPage){
+        postQuery
+        .skip(pageSize *(currentPage -1))
+        .limit(pageSize);
     }
     postQuery
         .then(documents =>{

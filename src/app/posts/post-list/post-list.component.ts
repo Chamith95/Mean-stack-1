@@ -5,6 +5,7 @@ import{ Post } from '../post.model';
 import{ PostsService } from '../posts.service';
 import { PageEvent } from '@angular/material';
 import { AuthService } from 'src/app/auth/auth.service';
+import { FormGroup, FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-post-list',
@@ -28,6 +29,7 @@ export class PostListComponent implements OnInit,OnDestroy {
   postsPerPage=2;
   currentPage=1;
   pageSizeOptions=[1,2,5,10];
+  SearchForm: any;
 
  
 
@@ -35,7 +37,7 @@ export class PostListComponent implements OnInit,OnDestroy {
 
   ngOnInit() {
     this.isLoading=true;
-    this.postsService.getPosts(this.postsPerPage,this.currentPage);
+    this.postsService.getPosts(this.postsPerPage,this.currentPage,this.SearchForm);
     this.userId=this.authservice.getUserId();
     this.postsSub=this.postsService.getPostUpdateListner()
       .subscribe((postData:{posts:Post[],postCount:number})=>{
@@ -51,21 +53,28 @@ export class PostListComponent implements OnInit,OnDestroy {
         this.userisauthenticated=isAutrhenticated;
         this.userId=this.authservice.getUserId();
       } );
+
+
+  
       
       
+  }
+
+  Search(){
+    this.postsService.getPosts(this.postsPerPage,this.currentPage,this.SearchForm);
   }
 
   onChangedPage(pageData:PageEvent){
     this.isLoading=true;
     this.currentPage=pageData.pageIndex+1;
     this.postsPerPage =pageData.pageSize;
-    this.postsService.getPosts(this.postsPerPage,this.currentPage);
+    this.postsService.getPosts(this.postsPerPage,this.currentPage,this.SearchForm);
   }
 
   onDelete(postId:string){
     this.isLoading=true;
       this.postsService.deletePost(postId).subscribe(()=>{
-        this.postsService.getPosts(this.postsPerPage,this.currentPage);
+        this.postsService.getPosts(this.postsPerPage,this.currentPage,this.SearchForm);
       });
   }
 

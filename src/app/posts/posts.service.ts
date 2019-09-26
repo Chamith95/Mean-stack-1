@@ -13,7 +13,36 @@ export class PostsService{
 
     constructor(private http:HttpClient,private router:Router){}
 
-    getPosts(postsPerPage:number,currentPage:number){
+    getPosts(postsPerPage:number,currentPage:number,searchCriteria:string){
+        // if(searchCriteria.length==0){
+        //     let search=
+        // }
+        const queryParams=`?pagesize=${postsPerPage}&page=${currentPage}&searchCriteria=${searchCriteria}`
+       this.http
+       .get<{message:string,posts:any,maxPosts:number}>(
+           "http://localhost:3000/api/posts" +queryParams
+           )
+       .pipe(map((postData)=>{
+            return{posts: postData.posts.map(post=>{
+                return{
+                    title: post.title,
+                    content: post.content,
+                    id: post._id,
+                    imagePath:post.imagePath,
+                    creator:post.creator
+                }
+            }),maxPosts:postData.maxPosts}
+       }))
+       .subscribe((transformedPostData)=>{
+           console.log(transformedPostData);
+          this.posts= transformedPostData.posts;
+          this.postUpdated.next({posts:[...this.posts],
+            postCount:transformedPostData.maxPosts})
+
+       });
+    }
+
+    filterPosts(postsPerPage:number,currentPage:number){
         const queryParams=`?pagesize=${postsPerPage}&page=${currentPage}`
        this.http
        .get<{message:string,posts:any,maxPosts:number}>(
@@ -38,6 +67,7 @@ export class PostsService{
 
        });
     }
+
 
     getPostUpdateListner(){
         return this.postUpdated.asObservable(); 
