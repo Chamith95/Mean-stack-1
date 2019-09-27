@@ -58,8 +58,6 @@ router.get("",(req,res,next)=>{
     const postQuery=Post.find()
     let fetcheposts;
     let searchtrue=(searchCriteria.length==9)
-    console.log(searchtrue)
-    console.log(searchCriteria)
     if(pageSize && currentPage && !searchtrue){
    
         postQuery.find({$text: {$search: searchCriteria}})
@@ -73,6 +71,7 @@ router.get("",(req,res,next)=>{
     postQuery
         .then(documents =>{
             fetchedPosts=documents;
+            
             return Post.countDocuments();
         }).then(count=>{
             res.status(200).json({

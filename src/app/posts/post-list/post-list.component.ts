@@ -6,6 +6,8 @@ import{ PostsService } from '../posts.service';
 import { PageEvent } from '@angular/material';
 import { AuthService } from 'src/app/auth/auth.service';
 import { FormGroup, FormControl } from '@angular/forms';
+import { LiqourService } from 'src/app/liqour/liqour.service';
+import { Liqour } from 'src/app/liqour/liqour.model';
 
 @Component({
   selector: 'app-post-list',
@@ -20,12 +22,15 @@ export class PostListComponent implements OnInit,OnDestroy {
   // ]
 
   posts:Post[]=[];
+  liqour:Liqour[]=[];
   public userisauthenticated:boolean=false;
   private postsSub:Subscription;
+  private liqourSub:Subscription;
   private authstatussubs:Subscription; 
   userId:string;
   isLoading=false;
   totalPosts=0;
+  totalliqours=0;
   postsPerPage=2;
   currentPage=1;
   pageSizeOptions=[1,2,5,10];
@@ -33,7 +38,7 @@ export class PostListComponent implements OnInit,OnDestroy {
 
  
 
-  constructor(public postsService:PostsService,private authservice:AuthService) { }
+  constructor(public postsService:PostsService,private authservice:AuthService,private liqourService:LiqourService) { }
 
   ngOnInit() {
     this.isLoading=true;
@@ -45,7 +50,7 @@ export class PostListComponent implements OnInit,OnDestroy {
         this.totalPosts=postData.postCount; 
         this.posts=postData.posts;
 
-      
+        
     });
     this.userisauthenticated=this.authservice.getIsAuth();
     this.authstatussubs=this.authservice.getAuthstatusListner().
@@ -54,8 +59,16 @@ export class PostListComponent implements OnInit,OnDestroy {
         this.userId=this.authservice.getUserId();
       } );
 
-
+      this.liqourService.getliqour(this.postsPerPage,this.currentPage,this.SearchForm);
+      this.liqourSub=this.liqourService.getLiqourUpdateListner()
+      .subscribe((liqourData:{liqour:Liqour[],liqourCount:number})=>{
+        this.isLoading=false;
+        this.totalliqours=liqourData.liqourCount; 
+        this.liqour=liqourData.liqour; 
+        console.log(this.liqour)       
+    });
   
+   
       
       
   }
